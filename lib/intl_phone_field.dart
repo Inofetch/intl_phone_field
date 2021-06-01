@@ -201,9 +201,10 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
         orElse: () => _countryList.first);
 
     validator = widget.autoValidate
-        ? ((value) => value != null && value.length != 10
-            ? 'Invalid Mobile Number'
-            : null)
+        ? ((value) =>
+            value != null && value.length != _selectedCountry['max_length']
+                ? 'Invalid Mobile Number'
+                : null)
         : widget.validator;
   }
 
