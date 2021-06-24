@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 void main() {
@@ -16,7 +17,16 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('ar', ''), // English, no country code
+      ],
       debugShowCheckedModeBanner: false,
+      locale: Locale('ar', 'QA'),
       home: Scaffold(
         appBar: AppBar(
           title: Text('Phone Field Example'),

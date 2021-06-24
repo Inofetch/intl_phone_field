@@ -215,69 +215,72 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
       useRootNavigator: false,
       builder: (context) => StatefulBuilder(
         builder: (ctx, setState) => Dialog(
-          child: Container(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              children: <Widget>[
-                TextField(
-                  decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.search),
-                    labelText: widget.searchText,
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    decoration: InputDecoration(
+                      suffixIcon: Icon(Icons.search),
+                      labelText: widget.searchText,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        filteredCountries = _countryList
+                            .where((country) => country['name']!
+                                .toLowerCase()
+                                .contains(value.toLowerCase()))
+                            .toList();
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      filteredCountries = _countryList
-                          .where((country) => country['name']!
-                              .toLowerCase()
-                              .contains(value.toLowerCase()))
-                          .toList();
-                    });
-                  },
-                ),
-                SizedBox(height: 20),
-                Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: filteredCountries.length,
-                    itemBuilder: (ctx, index) => Column(
-                      children: <Widget>[
-                        ListTile(
-                          leading: Image.asset(
-                            'assets/flags/${filteredCountries[index]['code']!.toLowerCase()}.png',
-                            package: 'intl_phone_field',
-                            width: 32,
-                          ),
-                          title: Text(
-                            filteredCountries[index]['name']!,
-                            style: TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                          trailing: Text(
-                            '+${filteredCountries[index]['dial_code']}',
-                            style: TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                          onTap: () {
-                            _selectedCountry = filteredCountries[index];
+                  SizedBox(height: 20),
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: filteredCountries.length,
+                      itemBuilder: (ctx, index) => Column(
+                        children: <Widget>[
+                          ListTile(
+                            leading: Image.asset(
+                              'assets/flags/${filteredCountries[index]['code']!.toLowerCase()}.png',
+                              package: 'intl_phone_field',
+                              width: 32,
+                            ),
+                            title: Text(
+                              filteredCountries[index]['name']!,
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                            trailing: Text(
+                              '+${filteredCountries[index]['dial_code']}',
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                            onTap: () {
+                              _selectedCountry = filteredCountries[index];
 
-                            if (widget.onCountryChanged != null) {
-                              widget.onCountryChanged!(
-                                PhoneNumber(
-                                  countryISOCode: _selectedCountry['code'],
-                                  countryCode:
-                                      '+${_selectedCountry['dial_code']}',
-                                  number: '',
-                                ),
-                              );
-                            }
+                              if (widget.onCountryChanged != null) {
+                                widget.onCountryChanged!(
+                                  PhoneNumber(
+                                    countryISOCode: _selectedCountry['code'],
+                                    countryCode:
+                                        '+${_selectedCountry['dial_code']}',
+                                    number: '',
+                                  ),
+                                );
+                              }
 
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        Divider(thickness: 1),
-                      ],
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          Divider(thickness: 1),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -288,57 +291,60 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        _buildFlagsButton(),
-        SizedBox(width: 8),
-        Expanded(
-          child: TextFormField(
-            initialValue: widget.initialValue,
-            readOnly: widget.readOnly,
-            obscureText: widget.obscureText,
-            textAlign: widget.textAlign,
-            onTap: () {
-              if (widget.onTap != null) widget.onTap!();
-            },
-            controller: widget.controller,
-            focusNode: widget.focusNode,
-            onFieldSubmitted: (s) {
-              if (widget.onSubmitted != null) widget.onSubmitted!(s);
-            },
-            decoration: widget.decoration,
-            style: widget.style,
-            onSaved: (value) {
-              if (widget.onSaved != null)
-                widget.onSaved!(
-                  PhoneNumber(
-                    countryISOCode: _selectedCountry['code'],
-                    countryCode: '+${_selectedCountry['dial_code']}',
-                    number: value,
-                  ),
-                );
-            },
-            onChanged: (value) {
-              if (widget.onChanged != null)
-                widget.onChanged!(
-                  PhoneNumber(
-                    countryISOCode: _selectedCountry['code'],
-                    countryCode: '+${_selectedCountry['dial_code']}',
-                    number: value,
-                  ),
-                );
-            },
-            validator: validator,
-            maxLength: _selectedCountry['max_length'],
-            keyboardType: widget.keyboardType,
-            inputFormatters: widget.inputFormatters,
-            enabled: widget.enabled,
-            keyboardAppearance: widget.keyboardAppearance,
-            autofocus: widget.autofocus,
-            textInputAction: widget.textInputAction,
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Row(
+        children: <Widget>[
+          _buildFlagsButton(),
+          SizedBox(width: 8),
+          Expanded(
+            child: TextFormField(
+              initialValue: widget.initialValue,
+              readOnly: widget.readOnly,
+              obscureText: widget.obscureText,
+              textAlign: widget.textAlign,
+              onTap: () {
+                if (widget.onTap != null) widget.onTap!();
+              },
+              controller: widget.controller,
+              focusNode: widget.focusNode,
+              onFieldSubmitted: (s) {
+                if (widget.onSubmitted != null) widget.onSubmitted!(s);
+              },
+              decoration: widget.decoration,
+              style: widget.style,
+              onSaved: (value) {
+                if (widget.onSaved != null)
+                  widget.onSaved!(
+                    PhoneNumber(
+                      countryISOCode: _selectedCountry['code'],
+                      countryCode: '+${_selectedCountry['dial_code']}',
+                      number: value,
+                    ),
+                  );
+              },
+              onChanged: (value) {
+                if (widget.onChanged != null)
+                  widget.onChanged!(
+                    PhoneNumber(
+                      countryISOCode: _selectedCountry['code'],
+                      countryCode: '+${_selectedCountry['dial_code']}',
+                      number: value,
+                    ),
+                  );
+              },
+              validator: validator,
+              maxLength: _selectedCountry['max_length'],
+              keyboardType: widget.keyboardType,
+              inputFormatters: widget.inputFormatters,
+              enabled: widget.enabled,
+              keyboardAppearance: widget.keyboardAppearance,
+              autofocus: widget.autofocus,
+              textInputAction: widget.textInputAction,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
